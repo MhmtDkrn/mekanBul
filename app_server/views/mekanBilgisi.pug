@@ -1,38 +1,34 @@
 extends layout 
-
+include fonksiyonlar/yildiz
 block content 
     .row.page-header 
         .col-lg-12 
-            h1 Donas 
-    .row 
+            h1= mekanBaslik
+    .row
         .col-xs-12.col-md-12 
             .row 
                 .col-xs-12.col-sm-6 
                     p.rating 
-                        span.glyphicon.glyphicon-star
-                        span.glyphicon.glyphicon-star
-                        span.glyphicon.glyphicon-star
-                        span.glyphicon.glyphicon-star
-                        span.glyphicon.glyphicon-star
-                    p Isparta/Merkez
+                        +puanOlustur(mekanDetay.puan)
+                    p= mekanDetay.adres
                     .panel.panel-primary 
                         .panel-heading 
                             h2.panel-title Açılış Saatleri  
-                        .panel-body 
+                        .panel-body
+                        each saat in mekanDetay.saatler 
                             p 
-                                | Pazartesi-Cuma: 09:00 - 24:00
-                            p 
-                                | Cumartesi-Pazar: 10:00 - 23:00
+                                | #{saat.gunler}:&nbsp;
+                                if (saat.kapali)
+                                    | Kapalı
+                                else 
+                                    | #{saat.acilis}-#{saat.kapanis}
                     .panel.panel-primary 
                         .panel-heading 
                             h2.panel-title Neler Var? 
                         .panel-body
-                            span.label.label-warning Hatay Usulü Dürüm
-                            | &nbsp;
-                            span.label.label-warning Zurna Dürüm
-                            | &nbsp;
-                            span.label.label-warning Gobik Dürüm
-                            | &nbsp;
+                            each imkan in mekanDetay.imkanlar
+                                span.label.label-warning= imkan 
+                                | &nbsp;
                 .col-xs-12.col-sm-6 
                     .panel.panel-primary 
                         .panel-heading 
@@ -48,17 +44,14 @@ block content
                     a.btn.btn-default.pull-right(href='/mekan/yorum/yeni') Yorum ekle 
                     h2.panel-title Müşteri yorumları
                 .panel-body.review-container 
-                    .row
-                        .review 
-                            .well.well-sm.review-header
-                                span.rating 
-                                span.glyphicon.glyphicon-star
-                                span.glyphicon.glyphicon-star
-                                span.glyphicon.glyphicon-star
-                                span.glyphicon.glyphicon-star
-                                span.glyphicon.glyphicon-star-empty
-                                span.review-author Mehmet Dikran IŞIK
-                                small.reviewTimestamp &nbsp; 13 Ekim 2022
-                            .col-xs-12 
-                                p Dönerler çok güzel!
+                    each yorum in mekanDetay.yorumlar 
+                        .row
+                            .review 
+                                .well.well-sm.review-header
+                                    span.rating 
+                                     +puanOlustur(yorum.puan)
+                                    span.review-author Mehmet Dikran IŞIK
+                                    small.reviewTimestamp &nbsp; 20 Ekim 2022
+                                .col-xs-12 
+                                    p= yorum.yorumMetni
 
